@@ -9,8 +9,12 @@ import { PgManyToManyPreset } from "@graphile-contrib/pg-many-to-many";
 import PersistedPlugin from "@grafserv/persisted";
 import { PgOmitArchivedPlugin } from "@graphile-contrib/pg-omit-archived";
 
-// For configuration file details, see: https://postgraphile.org/postgraphile/next/config
+// Use PGlite+pg-gateway for local ephemeral pg server
+import {db, connectionString} from './pglite.mjs'
 
+import {ReproPlugin} from './repro_plugin.mjs'
+
+// For configuration file details, see: https://postgraphile.org/postgraphile/next/config
 /** @satisfies {GraphileConfig.Preset} */
 const preset = {
   extends: [
@@ -25,7 +29,7 @@ const preset = {
     PgAggregatesPreset,
     // PgSimplifyInflectionPreset
   ],
-  plugins: [PersistedPlugin.default, PgOmitArchivedPlugin],
+  plugins: [PersistedPlugin.default, PgOmitArchivedPlugin, ReproPlugin],
   pgServices: [
     makePgService({
       // Database connection string:
